@@ -51,11 +51,13 @@ Review the codebase for compliance with established coding standards and resolve
 Analyze code compliance with all instruction files in `.github/instructions/`:
 
 - `aspnet-core.instructions.md` - ASP.NET Core patterns and best practices
+- `bicep.instructions.md` - Infrastructure as code standards and Bicep templates
 - `csharp-coding.instructions.md` - C# coding standards and conventions
-- `testing-strategy.instructions.md` - Testing framework usage and patterns
-- `razor-views.instructions.md` - View structure and accessibility guidelines
 - `documentation.instructions.md` - Documentation standards and requirements
 - `frameworks-and-libraries.instructions.md` - Approved technology stack compliance
+- `github-actions.instructions.md` - CI/CD workflow standards and deployment patterns
+- `razor-views.instructions.md` - View structure and accessibility guidelines
+- `testing-strategy.instructions.md` - Testing framework usage and patterns
 
 ### 2. **Code Quality Focus Areas**
 
