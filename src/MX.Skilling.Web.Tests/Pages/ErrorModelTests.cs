@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using MX.Skilling.Web.Pages;
 
 namespace MX.Skilling.Web.Tests.Pages;
@@ -18,8 +17,7 @@ public class ErrorModelTests
     public void OnGet_WithNoActivity_SetsRequestIdFromTraceIdentifier()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<ErrorModel>>();
-        var pageModel = new ErrorModel(mockLogger.Object);
+        var pageModel = new ErrorModel();
         var httpContext = new DefaultHttpContext
         {
             TraceIdentifier = "test-trace-id"
@@ -36,16 +34,6 @@ public class ErrorModelTests
         // Assert
         Assert.Equal("test-trace-id", pageModel.RequestId);
         Assert.True(pageModel.ShowRequestId);
-
-        // Verify error logging was called
-        mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Application error occurred with RequestId")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
     }
 
     /// <summary>
@@ -59,8 +47,7 @@ public class ErrorModelTests
     public void ShowRequestId_WithVariousInputs_ReturnsExpectedResult(string? requestId, bool expected)
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<ErrorModel>>();
-        var pageModel = new ErrorModel(mockLogger.Object)
+        var pageModel = new ErrorModel
         {
             RequestId = requestId
         };
@@ -70,16 +57,5 @@ public class ErrorModelTests
 
         // Assert
         Assert.Equal(expected, result);
-    }
-
-    /// <summary>
-    /// Verifies that constructor throws ArgumentNullException when logger is null.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() => new ErrorModel(null!));
-        Assert.Equal("logger", exception.ParamName);
     }
 }

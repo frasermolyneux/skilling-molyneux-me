@@ -46,7 +46,7 @@ After making any code changes, **always validate** using the commands from `.git
 
 ```bash
 # Standard validation sequence
-dotnet clean src/MX.Skilling.sln && dotnet restore src/MX.Skilling.sln && dotnet build src/MX.Skilling.sln && dotnet test src/MX.Skilling.sln
+dotnet clean src/MX.Skilling.sln && dotnet restore src/MX.Skilling.sln && dotnet build src/MX.Skilling.sln && dotnet test src/MX.Skilling.sln && dotnet format src/MX.Skilling.sln --verify-no-changes
 ```
 
 ### 5. **Verify & Confirm**

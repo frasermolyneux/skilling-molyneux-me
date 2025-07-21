@@ -53,6 +53,18 @@ var users = await repository.GetUsersAsync();
 // ❌ Bad: Logging obvious operations
 _logger.LogInformation("Home page accessed"); // User can see this in access logs
 
+// ❌ Bad: States the obvious about logging
+_logger.LogError("Application error occurred with RequestId: {RequestId}", requestId);
+// Comment: "Log meaningful error event for troubleshooting" - adds no value
+
+// ❌ Bad: Redundant method descriptions
+// Gets the user by ID
+public User GetUser(int id) { }
+
+// ❌ Bad: Obvious variable assignments
+// Set the user name
+user.Name = "John Doe";
+
 // ✅ Good: Explains why this approach is used
 // Using parallel execution here to avoid timeout on large datasets
 var tasks = batches.Select(batch => ProcessBatchAsync(batch));
@@ -61,6 +73,10 @@ await Task.WhenAll(tasks);
 // ✅ Good: Explains business reasoning
 // Cache for 5 minutes to balance performance with data freshness
 cache.Set(key, result, TimeSpan.FromMinutes(5));
+
+// ✅ Good: Explains non-obvious business logic
+// Apply 15% discount for enterprise customers with >100 licenses
+var discountRate = customer.IsEnterprise && customer.LicenseCount > 100 ? 0.15m : 0.0m;
 
 // ✅ Good: Logging meaningful business events
 _logger.LogWarning("Payment processing failed for order {OrderId}", orderId);

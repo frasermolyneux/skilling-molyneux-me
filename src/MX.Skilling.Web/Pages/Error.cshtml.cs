@@ -7,12 +7,10 @@ namespace MX.Skilling.Web.Pages;
 /// <summary>
 /// Page model for displaying application errors.
 /// </summary>
-/// <param name="logger">The logger instance.</param>
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 [IgnoreAntiforgeryToken]
-public sealed class ErrorModel(ILogger<ErrorModel> logger) : PageModel
+public sealed class ErrorModel : PageModel
 {
-    private readonly ILogger<ErrorModel> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     /// <summary>
     /// Gets or sets the request ID for error tracking.
@@ -30,7 +28,5 @@ public sealed class ErrorModel(ILogger<ErrorModel> logger) : PageModel
     public void OnGet()
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-        // Log meaningful error event for troubleshooting
-        _logger.LogError("Application error occurred with RequestId: {RequestId}", RequestId);
     }
 }
