@@ -57,3 +57,31 @@ jobs:
           path: |
             **/TestResults/**/coverage.cobertura.xml
           retention-days: 30
+
+  bicep-validation:
+    name: 'Bicep Validation'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint Bicep files
+        run: |
+          echo "Linting Bicep templates..."
+          az bicep lint --file infra/main.bicep
+          az bicep lint --file infra/resources.bicep
+
+      - name: Build Bicep files
+        run: |
+          mkdir -p bicep-output
+          az bicep build --file infra/main.bicep --outdir bicep-output
+          az bicep build --file infra/resources.bicep --outdir bicep-output
+
+      - name: Upload Bicep artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bicep-artifacts
+          path: bicep-output/
+          retention-days: 7
