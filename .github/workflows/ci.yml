@@ -1,0 +1,59 @@
+name: 'Continuous Integration'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: 'Build and Test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore src/MX.Skilling.sln
+
+      - name: Build solution
+        run: dotnet build src/MX.Skilling.sln --no-restore --configuration Release
+
+      - name: Run unit and integration tests
+        run: dotnet test src/MX.Skilling.sln --no-build --configuration Release --filter "Category=Unit|Category=Integration" --collect:"XPlat Code Coverage"
+
+      - name: Verify code formatting
+        run: dotnet format src/MX.Skilling.sln --verify-no-changes
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results
+          path: |
+            **/TestResults/
+            **/*.trx
+          retention-days: 7
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: |
+            **/TestResults/**/coverage.cobertura.xml
+          retention-days: 30
