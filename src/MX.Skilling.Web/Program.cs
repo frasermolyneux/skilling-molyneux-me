@@ -30,3 +30,8 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
+/// <summary>
+/// Program class for integration testing.
+/// </summary>
+public partial class Program { }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MX.Skilling.Web", "MX.Skill
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MX.Skilling.Web.Tests", "MX.Skilling.Web.Tests\MX.Skilling.Web.Tests.csproj", "{DA433304-C069-4B15-8EC4-9A7A2A70FADA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MX.Skilling.Web.UITests", "MX.Skilling.Web.UITests\MX.Skilling.Web.UITests.csproj", "{72E849B9-A986-49C7-B49B-FC994CC81628}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{DA433304-C069-4B15-8EC4-9A7A2A70FADA}.Release|x64.Build.0 = Release|Any CPU
 		{DA433304-C069-4B15-8EC4-9A7A2A70FADA}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA433304-C069-4B15-8EC4-9A7A2A70FADA}.Release|x86.Build.0 = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|x64.Build.0 = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Debug|x86.Build.0 = Debug|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|x64.ActiveCfg = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|x64.Build.0 = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|x86.ActiveCfg = Release|Any CPU
+		{72E849B9-A986-49C7-B49B-FC994CC81628}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

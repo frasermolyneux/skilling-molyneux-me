@@ -12,10 +12,15 @@
       "console": "internalConsole",
       "stopAtEntry": false,
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:7053;http://localhost:5088"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     },
     {
@@ -28,10 +33,15 @@
       "console": "internalConsole",
       "stopAtEntry": false,
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:7053;http://localhost:5088"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     },
     {
@@ -45,10 +55,15 @@
       "console": "internalConsole",
       "stopAtEntry": false,
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_URLS": "https://localhost:7053;http://localhost:5088"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     },
     {
@@ -73,6 +88,56 @@
       "stopAtEntry": false
     },
     {
+      "name": "Debug Unit Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/MX.Skilling.sln",
+        "--no-build",
+        "--filter",
+        "Category=Unit"
+      ],
+      "cwd": "${workspaceFolder}/src",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Debug Integration Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/MX.Skilling.sln",
+        "--no-build",
+        "--filter",
+        "Category=Integration"
+      ],
+      "cwd": "${workspaceFolder}/src",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Debug UI Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/MX.Skilling.Web.UITests/MX.Skilling.Web.UITests.csproj"
+      ],
+      "cwd": "${workspaceFolder}/src",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "PLAYWRIGHT_DEBUG": "1"
+      }
+    },
+    {
       "name": "Launch MX.Skilling.Web (Watch Mode)",
       "type": "coreclr",
       "request": "launch",
@@ -81,7 +146,9 @@
         "watch",
         "--project",
         "${workspaceFolder}/src/MX.Skilling.Web",
-        "run"
+        "run",
+        "--launch-profile",
+        "https"
       ],
       "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
       "console": "internalConsole",
@@ -91,8 +158,25 @@
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     }
   ],
-  "compounds": []
+  "compounds": [
+    {
+      "name": "Launch Web App for UI Testing",
+      "configurations": [
+        "Launch MX.Skilling.Web (Watch Mode)"
+      ],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "Web App + Testing",
+        "order": 1
+      }
+    }
+  ]
 }

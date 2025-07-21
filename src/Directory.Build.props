@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- Enable .editorconfig support -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningsNotAsErrors />
 
@@ -11,7 +11,7 @@
 
     <!-- Treat .editorconfig violations as warnings -->
     <CodeAnalysisRuleSet />
-    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
 
     <!-- Enable all analyzers -->
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
