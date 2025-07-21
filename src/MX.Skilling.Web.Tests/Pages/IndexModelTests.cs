@@ -5,6 +5,7 @@ namespace MX.Skilling.Web.Tests.Pages;
 /// <summary>
 /// Unit tests for the <see cref="IndexModel"/> page model.
 /// </summary>
+[Trait("Category", "Unit")]
 public class IndexModelTests
 {
     /// <summary>

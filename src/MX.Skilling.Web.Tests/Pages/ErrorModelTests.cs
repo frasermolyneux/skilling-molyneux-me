@@ -8,6 +8,7 @@ namespace MX.Skilling.Web.Tests.Pages;
 /// <summary>
 /// Unit tests for the <see cref="ErrorModel"/> page model.
 /// </summary>
+[Trait("Category", "Unit")]
 public class ErrorModelTests
 {
     /// <summary>

@@ -5,6 +5,7 @@ namespace MX.Skilling.Web.Tests.Pages;
 /// <summary>
 /// Unit tests for the <see cref="PrivacyModel"/> page model.
 /// </summary>
+[Trait("Category", "Unit")]
 public class PrivacyModelTests
 {
     /// <summary>
