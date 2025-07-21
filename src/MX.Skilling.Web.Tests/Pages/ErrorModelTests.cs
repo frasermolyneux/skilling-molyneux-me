@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using MX.Skilling.Web.Pages;
 
 namespace MX.Skilling.Web.Tests.Pages;
@@ -11,13 +12,14 @@ namespace MX.Skilling.Web.Tests.Pages;
 public class ErrorModelTests
 {
     /// <summary>
-    /// Verifies that OnGet method sets RequestId from HttpContext.TraceIdentifier when Activity.Current is null.
+    /// Verifies that OnGetAsync method sets RequestId from HttpContext.TraceIdentifier when Activity.Current is null.
     /// </summary>
     [Fact]
-    public void OnGet_WithNoActivity_SetsRequestIdFromTraceIdentifier()
+    public async Task OnGetAsync_WithNoActivity_SetsRequestIdFromTraceIdentifier()
     {
         // Arrange
-        var pageModel = new ErrorModel();
+        var mockLogger = new Mock<ILogger<ErrorModel>>();
+        var pageModel = new ErrorModel(mockLogger.Object);
         var httpContext = new DefaultHttpContext
         {
             TraceIdentifier = "test-trace-id"
@@ -29,11 +31,21 @@ public class ErrorModelTests
         pageModel.PageContext = pageContext;
 
         // Act
-        pageModel.OnGet();
+        await pageModel.OnGetAsync();
 
         // Assert
         Assert.Equal("test-trace-id", pageModel.RequestId);
         Assert.True(pageModel.ShowRequestId);
+
+        // Verify error logging was called
+        mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Error page accessed with RequestId")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 
     /// <summary>
@@ -47,7 +59,8 @@ public class ErrorModelTests
     public void ShowRequestId_WithVariousInputs_ReturnsExpectedResult(string? requestId, bool expected)
     {
         // Arrange
-        var pageModel = new ErrorModel
+        var mockLogger = new Mock<ILogger<ErrorModel>>();
+        var pageModel = new ErrorModel(mockLogger.Object)
         {
             RequestId = requestId
         };
@@ -57,5 +70,16 @@ public class ErrorModelTests
 
         // Assert
         Assert.Equal(expected, result);
+    }
+
+    /// <summary>
+    /// Verifies that constructor throws ArgumentNullException when logger is null.
+    /// </summary>
+    [Fact]
+    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentNullException>(() => new ErrorModel(null!));
+        Assert.Equal("logger", exception.ParamName);
     }
 }

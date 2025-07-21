@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MX.Skilling.Web.Pages;
 
 /// <summary>
 /// Page model for the privacy policy page.
 /// </summary>
-public sealed class PrivacyModel() : PageModel
+/// <param name="logger">The logger instance.</param>
+public sealed class PrivacyModel(ILogger<PrivacyModel> logger) : PageModel
 {
+    private readonly ILogger<PrivacyModel> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
     /// <summary>
     /// Handles GET requests to the privacy policy page.
     /// </summary>
-    public void OnGet()
+    public async Task OnGetAsync()
     {
+        _logger.LogInformation("Privacy policy page accessed");
+        await Task.CompletedTask;
     }
 }

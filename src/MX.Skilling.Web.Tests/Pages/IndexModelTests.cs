@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using MX.Skilling.Web.Pages;
 
 namespace MX.Skilling.Web.Tests.Pages;
@@ -8,15 +9,37 @@ namespace MX.Skilling.Web.Tests.Pages;
 public class IndexModelTests
 {
     /// <summary>
-    /// Verifies that OnGet method completes successfully without throwing exceptions.
+    /// Verifies that OnGetAsync method completes successfully without throwing exceptions.
     /// </summary>
     [Fact]
-    public void OnGet_ShouldCompleteSuccessfully()
+    public async Task OnGetAsync_ShouldCompleteSuccessfully()
     {
         // Arrange
-        var pageModel = new IndexModel();
+        var mockLogger = new Mock<ILogger<IndexModel>>();
+        var pageModel = new IndexModel(mockLogger.Object);
 
         // Act & Assert - Should not throw
-        pageModel.OnGet();
+        await pageModel.OnGetAsync();
+
+        // Verify logging was called
+        mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Home page accessed")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
+
+    /// <summary>
+    /// Verifies that constructor throws ArgumentNullException when logger is null.
+    /// </summary>
+    [Fact]
+    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentNullException>(() => new IndexModel(null!));
+        Assert.Equal("logger", exception.ParamName);
     }
 }
