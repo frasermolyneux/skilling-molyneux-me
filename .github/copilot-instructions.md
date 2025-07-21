@@ -23,18 +23,23 @@ When working on this project, follow this standardized development flow:
 - **Ask clarifying questions** if any requirements are unclear or ambiguous
 - **Confirm scope** - what files/components will be affected
 - **Verify understanding** - summarize what you plan to do before starting
+- **Question every change** - Does this provide genuine business value?
 
 ### 2. **Plan & Design**
 - **Analyze existing code** structure and patterns
 - **Follow established conventions** from the codebase
 - **Consider dependencies** and impacts on other components
 - **Plan testing approach** for the changes
+- **Avoid artificial complexity** - don't add async patterns without real async work
+- **Focus on high-impact improvements** - security, performance, maintainability
 
 ### 3. **Implement Changes**
 - **Make focused changes** - one logical change per file edit
 - **Follow coding standards** defined in .editorconfig
-- **Add appropriate documentation** and comments
+- **Add appropriate documentation** and comments only when they provide genuine value
 - **Ensure code quality** - proper error handling, validation, etc.
+- **Avoid unnecessary logging** - don't log obvious operations like "page accessed"
+- **Keep methods simple** - use async only when there's genuine async work
 
 ### 4. **Validate Changes**
 After making any code changes, **always validate** using the commands from `.github/instructions/dotnet-commands.instructions.md`:

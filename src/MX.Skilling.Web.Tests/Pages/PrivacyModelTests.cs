@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using MX.Skilling.Web.Pages;
 
 namespace MX.Skilling.Web.Tests.Pages;
@@ -9,37 +8,15 @@ namespace MX.Skilling.Web.Tests.Pages;
 public class PrivacyModelTests
 {
     /// <summary>
-    /// Verifies that OnGetAsync method completes successfully without throwing exceptions.
+    /// Verifies that OnGet method completes successfully without throwing exceptions.
     /// </summary>
     [Fact]
-    public async Task OnGetAsync_ShouldCompleteSuccessfully()
+    public void OnGet_ShouldCompleteSuccessfully()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<PrivacyModel>>();
-        var pageModel = new PrivacyModel(mockLogger.Object);
+        var pageModel = new PrivacyModel();
 
         // Act & Assert - Should not throw
-        await pageModel.OnGetAsync();
-
-        // Verify logging was called
-        mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Privacy policy page accessed")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    /// <summary>
-    /// Verifies that constructor throws ArgumentNullException when logger is null.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() => new PrivacyModel(null!));
-        Assert.Equal("logger", exception.ParamName);
+        pageModel.OnGet();
     }
 }

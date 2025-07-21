@@ -27,12 +27,26 @@ public string ProcessName(string? input)
 - **Add ConfigureAwait(false)** in library code (not required in ASP.NET Core)
 - **Use Task over async void** except for event handlers
 - **Suffix async methods with 'Async'**
+- **Only use async when there's genuine async work** - avoid artificial async patterns
 
 ```csharp
-// ✅ Good
+// ✅ Good - genuine async operation
 public async Task<User> GetUserAsync(int id)
 {
-    return await repository.FindAsync(id);
+    return await repository.FindAsync(id); // Real database call
+}
+
+// ✅ Good - simple synchronous operation
+public string FormatUserName(User user)
+{
+    return $"{user.FirstName} {user.LastName}";
+}
+
+// ❌ Bad - artificial async with no real async work
+public async Task<string> FormatUserNameAsync(User user)
+{
+    await Task.CompletedTask; // This adds complexity without benefit
+    return $"{user.FirstName} {user.LastName}";
 }
 
 // ❌ Bad - mixing patterns

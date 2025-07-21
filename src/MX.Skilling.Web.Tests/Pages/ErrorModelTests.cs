@@ -12,10 +12,10 @@ namespace MX.Skilling.Web.Tests.Pages;
 public class ErrorModelTests
 {
     /// <summary>
-    /// Verifies that OnGetAsync method sets RequestId from HttpContext.TraceIdentifier when Activity.Current is null.
+    /// Verifies that OnGet method sets RequestId from HttpContext.TraceIdentifier when Activity.Current is null.
     /// </summary>
     [Fact]
-    public async Task OnGetAsync_WithNoActivity_SetsRequestIdFromTraceIdentifier()
+    public void OnGet_WithNoActivity_SetsRequestIdFromTraceIdentifier()
     {
         // Arrange
         var mockLogger = new Mock<ILogger<ErrorModel>>();
@@ -31,7 +31,7 @@ public class ErrorModelTests
         pageModel.PageContext = pageContext;
 
         // Act
-        await pageModel.OnGetAsync();
+        pageModel.OnGet();
 
         // Assert
         Assert.Equal("test-trace-id", pageModel.RequestId);
@@ -42,7 +42,7 @@ public class ErrorModelTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Error page accessed with RequestId")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Application error occurred with RequestId")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

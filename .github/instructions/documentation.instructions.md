@@ -38,6 +38,8 @@ applyTo: '**'
 - Temporary implementation details
 - Step-by-step change histories
 - Obvious functionality
+- **Simple page views or basic CRUD operations**
+- **Logging statements for routine operations**
 
 ### Code Comments
 
@@ -48,6 +50,9 @@ Use inline comments **sparingly** and only when explaining **why**, not **what**
 // ❌ Bad: Explains what the code does (obvious)
 var users = await repository.GetUsersAsync();
 
+// ❌ Bad: Logging obvious operations
+_logger.LogInformation("Home page accessed"); // User can see this in access logs
+
 // ✅ Good: Explains why this approach is used
 // Using parallel execution here to avoid timeout on large datasets
 var tasks = batches.Select(batch => ProcessBatchAsync(batch));
@@ -56,7 +61,25 @@ await Task.WhenAll(tasks);
 // ✅ Good: Explains business reasoning
 // Cache for 5 minutes to balance performance with data freshness
 cache.Set(key, result, TimeSpan.FromMinutes(5));
+
+// ✅ Good: Logging meaningful business events
+_logger.LogWarning("Payment processing failed for order {OrderId}", orderId);
 ```
+
+### Logging Guidelines
+
+#### When to Add Logging
+✅ **Do log:**
+- **Business-critical events** (payments, user registration, data corruption)
+- **Errors and exceptions** with context
+- **Performance bottlenecks** during investigation
+- **Security events** (failed login attempts, permission escalations)
+
+❌ **Don't log:**
+- **Simple page views** - this is captured by web server logs
+- **Basic CRUD operations** without business significance
+- **Constructor calls or method entry** unless debugging specific issues
+- **Successful completion of trivial operations**
 
 #### XML Documentation
 For public APIs, include **concise** XML comments with:

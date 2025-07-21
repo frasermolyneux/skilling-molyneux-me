@@ -45,10 +45,12 @@ builder.Services.Configure<DatabaseOptions>(
 
 ### Page Models
 - **Keep page models focused** - one responsibility per page
-- **Use async methods** for data operations
+- **Use async methods** for data operations that are genuinely asynchronous
+- **Don't add artificial async** - avoid `await Task.CompletedTask` for simple operations
 - **Return appropriate results** (`Page()`, `RedirectToPage()`, etc.)
 
 ```csharp
+// ✅ Good - genuine async operation
 public class UsersModel : PageModel
 {
     private readonly IUserService _userService;
@@ -62,7 +64,25 @@ public class UsersModel : PageModel
 
     public async Task OnGetAsync()
     {
-        Users = await _userService.GetActiveUsersAsync();
+        Users = await _userService.GetActiveUsersAsync(); // Real async work
+    }
+}
+
+// ✅ Good - simple synchronous operation
+public class HomeModel : PageModel
+{
+    public void OnGet()
+    {
+        // Simple page view - no need for async
+    }
+}
+
+// ❌ Bad - artificial async with no real async work
+public class HomeModel : PageModel
+{
+    public async Task OnGetAsync()
+    {
+        await Task.CompletedTask; // This adds no value
     }
 }
 ```
@@ -104,7 +124,18 @@ public async Task<IActionResult> OnPostAsync()
 - **Use structured logging** with proper log levels
 - **Include correlation identifiers** for tracing
 - **Log at appropriate boundaries** (not in every method)
+- **Focus on business value** - avoid logging obvious operations
 
 ```csharp
+// ✅ Good - logs meaningful business event
 _logger.LogInformation("Creating user with email {Email}", request.Email);
+
+// ✅ Good - logs error with context
+_logger.LogError("Failed to process payment for order {OrderId}: {Error}", orderId, ex.Message);
+
+// ❌ Bad - logs obvious page access
+_logger.LogInformation("Home page accessed"); // This is already in web server logs
+
+// ❌ Bad - logs trivial operations
+_logger.LogInformation("Entering OnGet method"); // Adds no business value
 ```

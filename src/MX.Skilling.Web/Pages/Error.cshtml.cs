@@ -27,10 +27,10 @@ public sealed class ErrorModel(ILogger<ErrorModel> logger) : PageModel
     /// <summary>
     /// Handles GET requests to the error page and sets the request ID.
     /// </summary>
-    public async Task OnGetAsync()
+    public void OnGet()
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-        _logger.LogError("Error page accessed with RequestId: {RequestId}", RequestId);
-        await Task.CompletedTask;
+        // Log meaningful error event for troubleshooting
+        _logger.LogError("Application error occurred with RequestId: {RequestId}", RequestId);
     }
 }

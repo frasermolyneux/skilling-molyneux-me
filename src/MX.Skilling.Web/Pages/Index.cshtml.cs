@@ -5,17 +5,13 @@ namespace MX.Skilling.Web.Pages;
 /// <summary>
 /// Page model for the home page.
 /// </summary>
-/// <param name="logger">The logger instance.</param>
-public sealed class IndexModel(ILogger<IndexModel> logger) : PageModel
+public sealed class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
     /// <summary>
     /// Handles GET requests to the home page.
     /// </summary>
-    public async Task OnGetAsync()
+    public void OnGet()
     {
-        _logger.LogInformation("Home page accessed");
-        await Task.CompletedTask;
+        // Simple page view - no dependencies needed
     }
 }
