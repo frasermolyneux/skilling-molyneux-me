@@ -62,7 +62,7 @@ jobs:
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_LOCATION: "uksouth"
-      AZURE_ENV_NAME: "dev"
+      AZURE_ENV_NAME: "prd"
 
     steps:
       - name: Checkout
