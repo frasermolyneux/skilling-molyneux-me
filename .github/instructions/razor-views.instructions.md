@@ -111,6 +111,58 @@ else
 }
 ```
 
+## Automation & Testing Support
+
+### Automation IDs
+- **Add data-automation-id attributes** to interactive elements for UI testing
+- **Use descriptive, stable identifiers** that won't change with UI updates
+- **Target buttons, inputs, and key content areas** for test automation
+
+```html
+<!-- Forms and inputs -->
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Request.Email">Email Address</label>
+        <input asp-for="Request.Email"
+               class="form-control"
+               data-automation-id="email-input" />
+        <span asp-validation-for="Request.Email" class="text-danger"></span>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary"
+            data-automation-id="submit-button">
+        Create User
+    </button>
+</form>
+
+<!-- Navigation and interactive elements -->
+<nav>
+    <a href="/users" data-automation-id="users-nav-link">Users</a>
+    <a href="/dashboard" data-automation-id="dashboard-nav-link">Dashboard</a>
+</nav>
+
+<!-- Content areas for verification -->
+<div class="user-profile" data-automation-id="user-profile-section">
+    <h2 data-automation-id="user-name">@Model.User.Name</h2>
+    <p data-automation-id="user-email">@Model.User.Email</p>
+</div>
+
+<!-- Status and feedback messages -->
+@if (Model.IsSuccess)
+{
+    <div class="alert alert-success" data-automation-id="success-message">
+        User created successfully!
+    </div>
+}
+```
+
+### Automation ID Guidelines
+- **Use kebab-case naming** (e.g., `user-details-section`)
+- **Include element type** where helpful (`-button`, `-input`, `-link`)
+- **Be specific but not brittle** - avoid implementation details
+- **Group related elements** with common prefixes (`user-profile-name`, `user-profile-email`)
+
 ## Error Handling
 - **Display user-friendly error messages**
 - **Show validation summary** when model state is invalid

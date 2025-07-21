@@ -2,9 +2,15 @@
 
 namespace MX.Skilling.Web.Pages;
 
-internal sealed class PrivacyModel() : PageModel
+/// <summary>
+/// Page model for the privacy policy page.
+/// </summary>
+public sealed class PrivacyModel() : PageModel
 {
-    public static void OnGet()
+    /// <summary>
+    /// Handles GET requests to the privacy policy page.
+    /// </summary>
+    public void OnGet()
     {
     }
 }

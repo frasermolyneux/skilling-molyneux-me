@@ -2,9 +2,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MX.Skilling.Web.Pages;
 
-internal sealed class IndexModel() : PageModel
+/// <summary>
+/// Page model for the home page.
+/// </summary>
+public sealed class IndexModel() : PageModel
 {
-    public static void OnGet()
+    /// <summary>
+    /// Handles GET requests to the home page.
+    /// </summary>
+    public void OnGet()
     {
 
     }

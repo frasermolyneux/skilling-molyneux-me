@@ -4,7 +4,7 @@ applyTo: '**'
 
 # .NET Commands for MX.Skilling Solution
 
-This document provides the standard .NET CLI commands to work with the MX.Skilling solution.
+This document provides the standard .NET CLI commands to work with the MX.Skilling solution. *Always* prefer direct command execution over the tasks defined in the tasks.json file, as the tasks may not be up-to-date with the latest changes in the solution structure.
 
 ## Prerequisites
 
