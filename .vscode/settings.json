@@ -6,8 +6,6 @@
     "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
     "dotnet.symbolSearch.searchReferenceAssemblies": true,
     "omnisharp.enableRoslynAnalyzers": true,
-    "omnisharp.organizeImportsOnFormat": true,
-    "omnisharp.enableImportCompletion": true,
     "files.exclude": {
         "**/bin": true,
         "**/obj": true,
@@ -28,8 +26,6 @@
     },
     "csharp.format.enable": true,
     "csharp.semanticHighlighting.enabled": true,
-    "csharp.inlayHints.parameters.enabled": true,
-    "csharp.inlayHints.types.enabled": true,
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
@@ -54,5 +50,8 @@
     },
     "[markdown]": {
         "files.trimTrailingWhitespace": false
-    }
+    },
+    "dotnet.inlayHints.enableInlayHintsForParameters": true,
+    "csharp.inlayHints.enableInlayHintsForTypes": true,
+    "dotnet.formatting.organizeImportsOnFormat": true
 }
