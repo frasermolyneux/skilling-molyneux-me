@@ -83,16 +83,18 @@ output appServicePlanId string = appServicePlan.id
 ## Best Practices
 
 ### Naming Conventions
-- **Use consistent prefixes** - resource type abbreviations (e.g., `asp-`, `app-`, `kv-`)
+- **Use consistent prefixes** - Cloud Adoption Framework resource type abbreviations (e.g., `asp-`, `app-`, `kv-`, `id-`)
 - **Include environment indicators** - use environment name in resource names
 - **Use resource tokens** - ensure uniqueness with `uniqueString()`
 - **Follow Azure naming rules** - respect length limits and allowed characters
 
 ```bicep
 var resourceNames = {
-  keyVault: 'kv-skilling-${resourceToken}'
-  appService: 'app-skilling-${resourceToken}'
-  appServicePlan: 'asp-skilling-${resourceToken}'
+  resourceGroup: 'rg-skilling-${environmentName}'
+  keyVault: 'kv-skilling-${environmentName}-${resourceToken}'
+  appService: 'app-skilling-${environmentName}-${resourceToken}'
+  appServicePlan: 'asp-skilling-${environmentName}-${resourceToken}'
+  managedIdentity: 'id-skilling-${environmentName}-${resourceToken}'
   storageAccount: 'st${replace(resourceToken, '-', '')}'
 }
 ```
@@ -164,7 +166,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
 
 // Managed Identity for App Service
 resource appServiceIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: 'id-skilling-${resourceToken}'
+  name: 'id-skilling-${environmentName}-${resourceToken}'
   location: location
   tags: commonTags
 }
