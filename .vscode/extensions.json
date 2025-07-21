@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-vscode.test-adapter-converter",
+        "editorconfig.editorconfig",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.powershell"
+    ]
+}

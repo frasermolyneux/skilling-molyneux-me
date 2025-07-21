@@ -1,0 +1,60 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable .editorconfig support -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+
+    <!-- Enable nullable reference types by default -->
+    <Nullable>enable</Nullable>
+
+    <!-- Treat .editorconfig violations as warnings -->
+    <CodeAnalysisRuleSet />
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+
+    <!-- Enable all analyzers -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Default</AnalysisMode>
+
+    <!-- Generate XML documentation files -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Common versioning properties -->
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Common package properties -->
+    <Authors>Fraser Molyneux</Authors>
+    <Company>MX</Company>
+    <Product>MX.Skilling</Product>
+    <Copyright>Copyright © Fraser Molyneux</Copyright>
+
+    <!-- Source control integration -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <!-- Package references for all projects -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <!-- Analyzer package references -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+    <!-- Microsoft.CodeAnalysis.NetAnalyzers is included by default in .NET 9.0 SDK -->
+  </ItemGroup>
+
+  <!-- Global using statements for all projects -->
+  <ItemGroup>
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,98 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch MX.Skilling.Web",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/MX.Skilling.Web/bin/Debug/net9.0/MX.Skilling.Web.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      }
+    },
+    {
+      "name": "Launch MX.Skilling.Web (No Build)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/MX.Skilling.Web/bin/Debug/net9.0/MX.Skilling.Web.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      }
+    },
+    {
+      "name": "Launch MX.Skilling.Web (Production)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-release",
+      "program": "${workspaceFolder}/src/MX.Skilling.Web/bin/Release/net9.0/MX.Skilling.Web.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      }
+    },
+    {
+      "name": "Attach to MX.Skilling.Web",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}"
+    },
+    {
+      "name": "Debug Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/MX.Skilling.Web.Tests/MX.Skilling.Web.Tests.csproj",
+        "--no-build"
+      ],
+      "cwd": "${workspaceFolder}/src",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Launch MX.Skilling.Web (Watch Mode)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "watch",
+        "--project",
+        "${workspaceFolder}/src/MX.Skilling.Web",
+        "run"
+      ],
+      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      }
+    }
+  ],
+  "compounds": []
+}
