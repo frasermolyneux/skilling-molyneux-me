@@ -88,6 +88,23 @@ jobs:
       - name: Install Playwright Browsers
         run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
 
+      - name: Wait for website to be available
+        run: |
+          echo "Waiting for website to be available at ${{ needs.build-and-deploy-dev.outputs.web-app-url }}"
+          for i in {1..6}; do
+            if curl -s -o /dev/null -w "%{http_code}" "${{ needs.build-and-deploy-dev.outputs.web-app-url }}" | grep -q "200"; then
+              echo "Website is available!"
+              break
+            else
+              echo "Attempt $i: Website not yet available, waiting 10 seconds..."
+              sleep 10
+            fi
+            if [ $i -eq 6 ]; then
+              echo "Website failed to become available after 1 minute"
+              exit 1
+            fi
+          done
+
       - name: Run UI Tests
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
         env:
@@ -168,6 +185,23 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
+
+      - name: Wait for website to be available
+        run: |
+          echo "Waiting for website to be available at ${{ needs.build-and-deploy-prd.outputs.web-app-url }}"
+          for i in {1..6}; do
+            if curl -s -o /dev/null -w "%{http_code}" "${{ needs.build-and-deploy-prd.outputs.web-app-url }}" | grep -q "200"; then
+              echo "Website is available!"
+              break
+            else
+              echo "Attempt $i: Website not yet available, waiting 10 seconds..."
+              sleep 10
+            fi
+            if [ $i -eq 6 ]; then
+              echo "Website failed to become available after 1 minute"
+              exit 1
+            fi
+          done
 
       - name: Run UI Tests
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
