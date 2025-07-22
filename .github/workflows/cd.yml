@@ -52,6 +52,15 @@ jobs:
       - name: Deploy Application
         run: azd deploy --no-prompt
 
+      - name: Get deployed web app URL
+        id: get-url
+        run: |
+          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
+          echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
+
+    outputs:
+      web-app-url: ${{ steps.get-url.outputs.WEB_APP_URL }}
+
   ui-test-dev:
     environment: Development
     runs-on: ubuntu-latest
@@ -68,24 +77,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install azd
-        run: |
-          curl -fsSL https://aka.ms/install-azd.sh | bash
-          echo "$HOME/.azd/bin" >> $GITHUB_PATH
-
-      - name: Log in with Azure (Federated Credentials)
-        run: |
-          azd auth login \
-            --client-id "$AZURE_CLIENT_ID" \
-            --federated-credential-provider "github" \
-            --tenant-id "$AZURE_TENANT_ID"
-
-      - name: Get deployed web app URL
-        id: get-url
-        run: |
-          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
-          echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -98,9 +89,9 @@ jobs:
         run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
 
       - name: Run UI Tests
-        env:
-          WEB_APP_URL: ${{ steps.get-url.outputs.WEB_APP_URL }}
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
+        env:
+          WEB_APP_URL: ${{ needs.build-and-deploy-dev.outputs.web-app-url }}
 
   build-and-deploy-prd:
     environment: Production
@@ -142,6 +133,15 @@ jobs:
       - name: Deploy Application
         run: azd deploy --no-prompt
 
+      - name: Get deployed web app URL
+        id: get-url
+        run: |
+          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
+          echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
+
+    outputs:
+      web-app-url: ${{ steps.get-url.outputs.WEB_APP_URL }}
+
   ui-test-prd:
     environment: Production
     runs-on: ubuntu-latest
@@ -158,24 +158,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install azd
-        run: |
-          curl -fsSL https://aka.ms/install-azd.sh | bash
-          echo "$HOME/.azd/bin" >> $GITHUB_PATH
-
-      - name: Log in with Azure (Federated Credentials)
-        run: |
-          azd auth login \
-            --client-id "$AZURE_CLIENT_ID" \
-            --federated-credential-provider "github" \
-            --tenant-id "$AZURE_TENANT_ID"
-
-      - name: Get deployed web app URL
-        id: get-url
-        run: |
-          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
-          echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -188,6 +170,6 @@ jobs:
         run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
 
       - name: Run UI Tests
-        env:
-          WEB_APP_URL: ${{ steps.get-url.outputs.WEB_APP_URL }}
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
+        env:
+          WEB_APP_URL: ${{ needs.build-and-deploy-prd.outputs.web-app-url }}
