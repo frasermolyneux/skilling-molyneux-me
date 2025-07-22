@@ -55,7 +55,7 @@ jobs:
       - name: Get deployed web app URL
         id: get-url
         run: |
-          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
+          webAppUrl=$(azd env get-values | grep "^webAppUrl=" | cut -d'=' -f2 | tr -d '"')
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
 
     outputs:
@@ -136,7 +136,7 @@ jobs:
       - name: Get deployed web app URL
         id: get-url
         run: |
-          webAppUrl=$(azd show --output json | jq -r '.services.web.endpoint')
+          webAppUrl=$(azd env get-values | grep "^webAppUrl=" | cut -d'=' -f2 | tr -d '"')
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
 
     outputs:
