@@ -2,10 +2,10 @@ targetScope = 'subscription'
 
 // Parameters
 @description('The name of the environment (e.g., dev, staging, prod)')
-param environmentName string = 'dev'
+param environmentName string
 
 @description('The primary location for the resources')
-param location string = 'uksouth'
+param location string
 
 @description('The resource token to make resource names unique')
 param resourceToken string = uniqueString(subscription().id, location, environmentName)
