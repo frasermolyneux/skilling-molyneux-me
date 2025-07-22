@@ -1,8 +1,9 @@
 # GitHub Copilot Instructions
 
-## Communication Guidelines
+## General Guidelines
 
 - At any point if there is something that is unclear or you have a low confidence in; I want you to ask clarifying questions back to me.
+- DO *NOT* create summary markdown files of a change set unless there is a specific request for it.
 
 ## Instructions Directory
 

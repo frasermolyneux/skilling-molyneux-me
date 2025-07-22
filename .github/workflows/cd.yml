@@ -67,6 +67,11 @@ jobs:
 
     needs: [build-and-deploy-dev]
 
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
@@ -86,7 +91,7 @@ jobs:
         run: dotnet build src/MX.Skilling.Web.UITests --configuration Release
 
       - name: Install Playwright Browsers
-        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
+        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install ${{ matrix.browser }}
 
       - name: Wait for website to be available
         run: |
@@ -105,10 +110,21 @@ jobs:
             fi
           done
 
-      - name: Run UI Tests
+      - name: Run UI Tests (${{ matrix.browser }})
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
         env:
           WEB_APP_URL: ${{ needs.build-and-deploy-dev.outputs.web-app-url }}
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-test-results-dev-${{ matrix.browser }}
+          path: |
+            **/TestResults/
+            **/*.trx
+          retention-days: 7
 
   build-and-deploy-prd:
     environment: Production
@@ -165,6 +181,11 @@ jobs:
 
     needs: [build-and-deploy-prd]
 
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
@@ -184,7 +205,7 @@ jobs:
         run: dotnet build src/MX.Skilling.Web.UITests --configuration Release
 
       - name: Install Playwright Browsers
-        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
+        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install ${{ matrix.browser }}
 
       - name: Wait for website to be available
         run: |
@@ -203,7 +224,18 @@ jobs:
             fi
           done
 
-      - name: Run UI Tests
+      - name: Run UI Tests (${{ matrix.browser }})
         run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
         env:
           WEB_APP_URL: ${{ needs.build-and-deploy-prd.outputs.web-app-url }}
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-test-results-prd-${{ matrix.browser }}
+          path: |
+            **/TestResults/
+            **/*.trx
+          retention-days: 7

@@ -36,9 +36,10 @@ public abstract class PlaywrightTestBase : IAsyncLifetime
     protected virtual string BaseUrl => GetBaseUrl();
 
     /// <summary>
-    /// The browser type to use for tests. Defaults to Chromium.
+    /// The browser type to use for tests. Can be configured via PLAYWRIGHT_BROWSER environment variable.
+    /// Defaults to Chromium.
     /// </summary>
-    protected virtual string BrowserType => "chromium";
+    protected virtual string BrowserType => Environment.GetEnvironmentVariable("PLAYWRIGHT_BROWSER") ?? "chromium";
 
     /// <summary>
     /// Initializes the Playwright browser and page for testing.
