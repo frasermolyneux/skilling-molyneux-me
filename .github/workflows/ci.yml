@@ -6,15 +6,12 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  DOTNET_VERSION: '9.0.x'
-
 permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: 'Build and Test'
+  validation:
+    name: 'Build, Test and Validate'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -22,66 +19,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Build and Test
+        uses: ./.github/actions/build-and-test
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore src/MX.Skilling.sln
-
-      - name: Build solution
-        run: dotnet build src/MX.Skilling.sln --no-restore --configuration Release
-
-      - name: Run unit and integration tests
-        run: dotnet test src/MX.Skilling.sln --no-build --configuration Release --filter "Category=Unit|Category=Integration" --collect:"XPlat Code Coverage"
-
-      - name: Verify code formatting
-        run: dotnet format src/MX.Skilling.sln --verify-no-changes
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: test-results
-          path: |
-            **/TestResults/
-            **/*.trx
-          retention-days: 7
-
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-reports
-          path: |
-            **/TestResults/**/coverage.cobertura.xml
-          retention-days: 30
-
-  bicep-validation:
-    name: 'Bicep Validation'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Lint Bicep files
-        run: |
-          echo "Linting Bicep templates..."
-          az bicep lint --file infra/main.bicep
-          az bicep lint --file infra/resources.bicep
-
-      - name: Build Bicep files
-        run: |
-          mkdir -p bicep-output
-          az bicep build --file infra/main.bicep --outdir bicep-output
-          az bicep build --file infra/resources.bicep --outdir bicep-output
-
-      - name: Upload Bicep artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: bicep-artifacts
-          path: bicep-output/
-          retention-days: 7
+      - name: Bicep Validation
+        uses: ./.github/actions/bicep-validation

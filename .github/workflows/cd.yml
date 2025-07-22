@@ -14,9 +14,27 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
+  validation:
+    name: 'Build, Test and Validate'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and Test
+        uses: ./.github/actions/build-and-test
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Bicep Validation
+        uses: ./.github/actions/bicep-validation
+
   build-and-deploy-dev:
     environment: Development
     runs-on: ubuntu-latest
+    needs: [validation]
 
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}

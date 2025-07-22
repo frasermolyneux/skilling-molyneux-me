@@ -1,0 +1,51 @@
+name: 'Build and Test'
+description: 'Builds the solution and runs unit and integration tests'
+
+inputs:
+  dotnet-version:
+    description: 'The .NET version to use'
+    required: false
+    default: '9.0.x'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Restore dependencies
+      shell: bash
+      run: dotnet restore src/MX.Skilling.sln
+
+    - name: Build solution
+      shell: bash
+      run: dotnet build src/MX.Skilling.sln --no-restore --configuration Release
+
+    - name: Run unit and integration tests
+      shell: bash
+      run: dotnet test src/MX.Skilling.sln --no-build --configuration Release --filter "Category=Unit|Category=Integration" --collect:"XPlat Code Coverage"
+
+    - name: Verify code formatting
+      shell: bash
+      run: dotnet format src/MX.Skilling.sln --verify-no-changes
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: test-results-${{ github.run_id }}
+        path: |
+          **/TestResults/
+          **/*.trx
+        retention-days: 7
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-reports-${{ github.run_id }}
+        path: |
+          **/TestResults/**/coverage.cobertura.xml
+        retention-days: 30

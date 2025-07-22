@@ -1,0 +1,27 @@
+name: 'Bicep Validation'
+description: 'Lints and builds Bicep templates'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Lint Bicep files
+      shell: bash
+      run: |
+        echo "Linting Bicep templates..."
+        az bicep lint --file infra/main.bicep
+        az bicep lint --file infra/resources.bicep
+
+    - name: Build Bicep files
+      shell: bash
+      run: |
+        mkdir -p bicep-output
+        az bicep build --file infra/main.bicep --outdir bicep-output
+        az bicep build --file infra/resources.bicep --outdir bicep-output
+
+    - name: Upload Bicep artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: bicep-artifacts-${{ github.run_id }}
+        path: bicep-output/
+        retention-days: 7
