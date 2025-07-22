@@ -91,13 +91,16 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Build UI Tests Project
+        run: dotnet build src/MX.Skilling.Web.UITests --configuration Release
+
       - name: Install Playwright Browsers
-        run: pwsh -ExecutionPolicy Bypass -File src/MX.Skilling.Web.UITests/install-browsers.ps1
+        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
 
       - name: Run UI Tests
         env:
           WEB_APP_URL: ${{ steps.get-url.outputs.WEB_APP_URL }}
-        run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --verbosity normal
+        run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal
 
   build-and-deploy-prd:
     environment: Production
@@ -178,10 +181,13 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Build UI Tests Project
+        run: dotnet build src/MX.Skilling.Web.UITests --configuration Release
+
       - name: Install Playwright Browsers
-        run: pwsh -ExecutionPolicy Bypass -File src/MX.Skilling.Web.UITests/install-browsers.ps1
+        run: pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
 
       - name: Run UI Tests
         env:
           WEB_APP_URL: ${{ steps.get-url.outputs.WEB_APP_URL }}
-        run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --verbosity normal
+        run: dotnet test src/MX.Skilling.Web.UITests --configuration Release --no-build --verbosity normal

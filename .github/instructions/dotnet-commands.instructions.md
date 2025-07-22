@@ -175,5 +175,14 @@ dotnet format src/MX.Skilling.sln --verify-no-changes
 ### Playwright Browser Installation (UI Tests Setup)
 ```bash
 # Install Playwright browsers (required for UI tests)
+# First build the UI tests project, then use the project-local Playwright installation
+dotnet build src/MX.Skilling.Web.UITests
+pwsh src/MX.Skilling.Web.UITests/bin/Debug/net9.0/playwright.ps1 install chromium firefox webkit
+
+# For Release configuration:
+dotnet build src/MX.Skilling.Web.UITests --configuration Release
+pwsh src/MX.Skilling.Web.UITests/bin/Release/net9.0/playwright.ps1 install chromium firefox webkit
+
+# Alternatively, you can still use the helper script (now updated to use modern approach):
 pwsh -ExecutionPolicy Bypass -File src/MX.Skilling.Web.UITests/install-browsers.ps1
 ```
