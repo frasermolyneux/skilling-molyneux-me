@@ -1,0 +1,58 @@
+@page
+@model MX.Skilling.Web.Pages.ManageGraphModel
+@{
+    ViewData["Title"] = "Manage Graph";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Manage Graph</h1>
+    <p>This page is only accessible to Admin users.</p>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>User Information</h3>
+                </div>
+                <div class="card-body">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-3">Display Name</dt>
+                            <dd class="col-sm-9">@User.Identity.Name</dd>
+
+                            <dt class="col-sm-3">User Principal Name</dt>
+                            <dd class="col-sm-9">@User.FindFirst("preferred_username")?.Value</dd>
+
+                            <dt class="col-sm-3">Object ID</dt>
+                            <dd class="col-sm-9">@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value</dd>
+
+                            <dt class="col-sm-3">Tenant ID</dt>
+                            <dd class="col-sm-9">@User.FindFirst("tid")?.Value</dd>
+                        </dl>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Graph Management</h3>
+                </div>
+                <div class="card-body">
+                    <p>Future Microsoft Graph management features will be implemented here.</p>
+                    <p>This could include:</p>
+                    <ul class="text-start">
+                        <li>User management</li>
+                        <li>Group management</li>
+                        <li>Application management</li>
+                        <li>Directory insights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

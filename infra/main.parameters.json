@@ -7,6 +7,9 @@
     },
     "location": {
       "value": "${AZURE_LOCATION}"
+    },
+    "adminEmails": {
+      "value": "frasermolyneux@mx-mail.io"
     }
   }
 }

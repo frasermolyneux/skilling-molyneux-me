@@ -1,9 +1,17 @@
+using MX.Skilling.Web.Extensions;
+
 // Application entry point and configuration
 var builder = WebApplication.CreateBuilder(args);
+
+// Add Key Vault configuration
+builder.AddKeyVaultConfiguration();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHealthChecks();
+
+// Add Azure AD authentication and authorization
+builder.Services.AddAzureAdAuthentication(builder.Configuration);
 
 // Configure logging
 builder.Logging.ClearProviders();
@@ -24,6 +32,8 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+// Authentication must come before authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapHealthChecks("/health");

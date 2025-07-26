@@ -70,14 +70,23 @@ jobs:
       - name: Deploy Application
         run: azd deploy --no-prompt
 
-      - name: Get deployed web app URL
-        id: get-url
+      - name: Get deployment outputs
+        id: get-outputs
         run: |
           webAppUrl=$(azd env get-values | grep "^webAppUrl=" | cut -d'=' -f2 | tr -d '"')
+          keyVaultName=$(azd env get-values | grep "^keyVaultName=" | cut -d'=' -f2 | tr -d '"')
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
+          echo "KEY_VAULT_NAME=$keyVaultName" >> $GITHUB_OUTPUT
+
+      - name: Setup App Registration
+        run: |
+          pwsh -File scripts/setup-app-registration.ps1 \
+            -EnvironmentName "${{ env.AZURE_ENV_NAME }}" \
+            -WebAppUrl "${{ steps.get-outputs.outputs.WEB_APP_URL }}" \
+            -KeyVaultName "${{ steps.get-outputs.outputs.KEY_VAULT_NAME }}"
 
     outputs:
-      web-app-url: ${{ steps.get-url.outputs.WEB_APP_URL }}
+      web-app-url: ${{ steps.get-outputs.outputs.WEB_APP_URL }}
 
   ui-test-dev:
     environment: Development
@@ -184,14 +193,23 @@ jobs:
       - name: Deploy Application
         run: azd deploy --no-prompt
 
-      - name: Get deployed web app URL
-        id: get-url
+      - name: Get deployment outputs
+        id: get-outputs
         run: |
           webAppUrl=$(azd env get-values | grep "^webAppUrl=" | cut -d'=' -f2 | tr -d '"')
+          keyVaultName=$(azd env get-values | grep "^keyVaultName=" | cut -d'=' -f2 | tr -d '"')
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
+          echo "KEY_VAULT_NAME=$keyVaultName" >> $GITHUB_OUTPUT
+
+      - name: Setup App Registration
+        run: |
+          pwsh -File scripts/setup-app-registration.ps1 \
+            -EnvironmentName "${{ env.AZURE_ENV_NAME }}" \
+            -WebAppUrl "${{ steps.get-outputs.outputs.WEB_APP_URL }}" \
+            -KeyVaultName "${{ steps.get-outputs.outputs.KEY_VAULT_NAME }}"
 
     outputs:
-      web-app-url: ${{ steps.get-url.outputs.WEB_APP_URL }}
+      web-app-url: ${{ steps.get-outputs.outputs.WEB_APP_URL }}
 
   ui-test-prd:
     environment: Production

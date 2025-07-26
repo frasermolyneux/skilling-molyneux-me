@@ -13,6 +13,9 @@ param resourceToken string = uniqueString(subscription().id, location, environme
 @description('The timestamp for the deployment')
 param timestamp string = utcNow()
 
+@description('Comma-separated list of admin user emails')
+param adminEmails string = ''
+
 // Variables
 var resourceGroupName = 'rg-skilling-${environmentName}'
 var appServicePlanName = 'asp-skilling-${environmentName}-${resourceToken}'
@@ -44,6 +47,7 @@ module mainResources 'resources.bicep' = {
     environmentName: environmentName
     appServicePlanName: appServicePlanName
     webAppName: webAppName
+    adminEmails: adminEmails
     tags: standardTags
   }
 }
@@ -54,3 +58,5 @@ output resourceGroupName string = resourceGroup.name
 output webAppName string = mainResources.outputs.webAppName
 output webAppUrl string = mainResources.outputs.webAppUrl
 output appServicePlanName string = mainResources.outputs.appServicePlanName
+output keyVaultName string = mainResources.outputs.keyVaultName
+output keyVaultUri string = mainResources.outputs.keyVaultUri

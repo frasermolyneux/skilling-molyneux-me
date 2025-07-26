@@ -7,16 +7,16 @@ namespace MX.Skilling.Web.Tests.Integration;
 /// Integration tests for the web application endpoints.
 /// </summary>
 [Trait("Category", "Integration")]
-public sealed class WebApplicationIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class WebApplicationIntegrationTests : IClassFixture<TestWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestWebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WebApplicationIntegrationTests"/> class.
     /// </summary>
     /// <param name="factory">The web application factory.</param>
-    public WebApplicationIntegrationTests(WebApplicationFactory<Program> factory)
+    public WebApplicationIntegrationTests(TestWebApplicationFactory<Program> factory)
     {
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         _client = _factory.CreateClient();
