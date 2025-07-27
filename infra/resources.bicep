@@ -21,6 +21,8 @@ param adminEmails string = ''
 
 var managedIdentityName = 'id-skilling-${split(webAppName, '-')[2]}-${split(webAppName, '-')[3]}'
 var keyVaultName = 'kv-skilling-${environmentName}-${substring(uniqueString(resourceGroup().id), 0, 6)}'
+var logAnalyticsWorkspaceName = 'log-skilling-${environmentName}-${substring(uniqueString(resourceGroup().id), 0, 6)}'
+var applicationInsightsName = 'appi-skilling-${environmentName}-${substring(uniqueString(resourceGroup().id), 0, 6)}'
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: managedIdentityName
@@ -45,6 +47,37 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enableSoftDelete: true
     softDeleteRetentionInDays: 7
     enableRbacAuthorization: true
+  }
+}
+
+// Log Analytics workspace for Application Insights
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 90
+    features: {
+      enableLogAccessUsingOnlyResourcePermissions: true
+    }
+  }
+}
+
+// Application Insights for monitoring and telemetry
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: applicationInsightsName
+  location: location
+  tags: tags
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalyticsWorkspace.id
+    IngestionMode: 'LogAnalytics'
+    publicNetworkAccessForIngestion: 'Enabled'
+    publicNetworkAccessForQuery: 'Enabled'
   }
 }
 
@@ -120,6 +153,10 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
           value: keyVault.properties.vaultUri
         }
         {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: applicationInsights.properties.ConnectionString
+        }
+        {
           name: 'AzureAd__Instance'
           value: environment().authentication.loginEndpoint
         }
@@ -158,3 +195,8 @@ output webAppIdentityPrincipalId string = managedIdentity.properties.principalId
 output managedIdentityId string = managedIdentity.id
 output keyVaultName string = keyVault.name
 output keyVaultUri string = keyVault.properties.vaultUri
+output logAnalyticsWorkspaceName string = logAnalyticsWorkspace.name
+output logAnalyticsWorkspaceId string = logAnalyticsWorkspace.id
+output applicationInsightsName string = applicationInsights.name
+output applicationInsightsConnectionString string = applicationInsights.properties.ConnectionString
+output applicationInsightsInstrumentationKey string = applicationInsights.properties.InstrumentationKey

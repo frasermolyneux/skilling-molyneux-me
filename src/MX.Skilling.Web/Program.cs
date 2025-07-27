@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add Key Vault configuration
 builder.AddKeyVaultConfiguration();
 
+// Add Application Insights telemetry
+builder.Services.AddApplicationInsightsTelemetry();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHealthChecks();
