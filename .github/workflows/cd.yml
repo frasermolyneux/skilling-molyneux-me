@@ -59,16 +59,15 @@ jobs:
             --federated-credential-provider "github" \
             --tenant-id "$AZURE_TENANT_ID"
 
+      - name: Log in with Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
       - name: Provision Infrastructure
         run: azd provision --no-prompt
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Deploy Application
-        run: azd deploy --no-prompt
 
       - name: Get deployment outputs
         id: get-outputs
@@ -78,19 +77,20 @@ jobs:
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
           echo "KEY_VAULT_NAME=$keyVaultName" >> $GITHUB_OUTPUT
 
-      - name: Log in with Azure CLI
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
-
       - name: Setup App Registration
         run: |
           pwsh -File scripts/setup-app-registration.ps1 \
             -EnvironmentName "${{ env.AZURE_ENV_NAME }}" \
             -WebAppUrl "${{ steps.get-outputs.outputs.WEB_APP_URL }}" \
             -KeyVaultName "${{ steps.get-outputs.outputs.KEY_VAULT_NAME }}"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Deploy Application
+        run: azd deploy --no-prompt
 
     outputs:
       web-app-url: ${{ steps.get-outputs.outputs.WEB_APP_URL }}
@@ -189,6 +189,13 @@ jobs:
             --federated-credential-provider "github" \
             --tenant-id "$AZURE_TENANT_ID"
 
+      - name: Log in with Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
       - name: Provision Infrastructure
         run: azd provision --no-prompt
 
@@ -196,9 +203,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Deploy Application
-        run: azd deploy --no-prompt
 
       - name: Get deployment outputs
         id: get-outputs
@@ -208,19 +212,15 @@ jobs:
           echo "WEB_APP_URL=$webAppUrl" >> $GITHUB_OUTPUT
           echo "KEY_VAULT_NAME=$keyVaultName" >> $GITHUB_OUTPUT
 
-      - name: Log in with Azure CLI
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
-
       - name: Setup App Registration
         run: |
           pwsh -File scripts/setup-app-registration.ps1 \
             -EnvironmentName "${{ env.AZURE_ENV_NAME }}" \
             -WebAppUrl "${{ steps.get-outputs.outputs.WEB_APP_URL }}" \
             -KeyVaultName "${{ steps.get-outputs.outputs.KEY_VAULT_NAME }}"
+
+      - name: Deploy Application
+        run: azd deploy --no-prompt
 
     outputs:
       web-app-url: ${{ steps.get-outputs.outputs.WEB_APP_URL }}
