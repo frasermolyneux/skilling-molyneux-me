@@ -17,7 +17,8 @@ public static class KeyVaultExtensions
     {
         var keyVaultUri = builder.Configuration["KeyVaultUri"];
 
-        if (!string.IsNullOrEmpty(keyVaultUri))
+        // Skip Key Vault configuration in testing environments to avoid Azure credential requirements
+        if (!string.IsNullOrEmpty(keyVaultUri) && !builder.Environment.IsEnvironment("Testing"))
         {
             // Use managed identity in Azure, default Azure credential locally
             var credential = new DefaultAzureCredential();
