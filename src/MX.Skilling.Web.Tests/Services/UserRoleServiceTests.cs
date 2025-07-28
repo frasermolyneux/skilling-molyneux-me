@@ -20,12 +20,12 @@ public class UserRoleServiceTests
     {
         // Arrange
         var mockLogger = new Mock<ILogger<UserRoleService>>();
-        var testUserEmail = "test@example.com";
-        var adminEmails = $"admin1@example.com,{testUserEmail}, admin3@example.com";
+        var testUserPrincipalName = "test@example.com";
+        var adminUserPrincipalNames = $"admin1@example.com,{testUserPrincipalName}, admin3@example.com";
 
         var configurationData = new Dictionary<string, string?>
         {
-            ["AdminEmails"] = adminEmails
+            ["AdminUserPrincipalNames"] = adminUserPrincipalNames
         };
 
         var configuration = new ConfigurationBuilder()
@@ -36,7 +36,7 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email, testUserEmail)
+            new("preferred_username", testUserPrincipalName)
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);
@@ -56,13 +56,13 @@ public class UserRoleServiceTests
     {
         // Arrange
         var mockLogger = new Mock<ILogger<UserRoleService>>();
-        var testUserEmail = "test@example.com";
+        var testUserPrincipalName = "test@example.com";
 
         var configurationData = new Dictionary<string, string?>
         {
-            ["AdminEmails:0"] = "admin1@example.com",
-            ["AdminEmails:1"] = testUserEmail,
-            ["AdminEmails:2"] = "admin3@example.com"
+            ["AdminUserPrincipalNames:0"] = "admin1@example.com",
+            ["AdminUserPrincipalNames:1"] = testUserPrincipalName,
+            ["AdminUserPrincipalNames:2"] = "admin3@example.com"
         };
 
         var configuration = new ConfigurationBuilder()
@@ -73,7 +73,7 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email, testUserEmail)
+            new("preferred_username", testUserPrincipalName)
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);
@@ -96,7 +96,7 @@ public class UserRoleServiceTests
 
         var configurationData = new Dictionary<string, string?>
         {
-            ["AdminEmails"] = "admin1@example.com,admin2@example.com,admin3@example.com"
+            ["AdminUserPrincipalNames"] = "admin1@example.com,admin2@example.com,admin3@example.com"
         };
 
         var configuration = new ConfigurationBuilder()
@@ -107,7 +107,7 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email, "different@example.com")
+            new("preferred_username", "different@example.com")
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);
@@ -153,7 +153,7 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email, "test@example.com")
+            new("preferred_username", "test@example.com")
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);
@@ -166,7 +166,7 @@ public class UserRoleServiceTests
     }
 
     /// <summary>
-    /// Verifies that email comparison is case-insensitive.
+    /// Verifies that User Principal Name comparison is case-insensitive.
     /// </summary>
     [Fact]
     public async Task IsUserInAdminRoleAsync_CaseInsensitive_ReturnsTrue()
@@ -176,7 +176,7 @@ public class UserRoleServiceTests
 
         var configurationData = new Dictionary<string, string?>
         {
-            ["AdminEmails"] = "ADMIN@EXAMPLE.COM"
+            ["AdminUserPrincipalNames"] = "ADMIN@EXAMPLE.COM"
         };
 
         var configuration = new ConfigurationBuilder()
@@ -187,7 +187,7 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email, "admin@example.com")
+            new("preferred_username", "admin@example.com")
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);
@@ -207,11 +207,11 @@ public class UserRoleServiceTests
     {
         // Arrange
         var mockLogger = new Mock<ILogger<UserRoleService>>();
-        var testUserEmail = "test@example.com";
+        var testUserPrincipalName = "test@example.com";
 
         var configurationData = new Dictionary<string, string?>
         {
-            ["AdminEmails"] = testUserEmail
+            ["AdminUserPrincipalNames"] = testUserPrincipalName
         };
 
         var configuration = new ConfigurationBuilder()
@@ -222,7 +222,42 @@ public class UserRoleServiceTests
 
         var claims = new List<Claim>
         {
-            new("preferred_username", testUserEmail)
+            new("preferred_username", testUserPrincipalName)
+        };
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var user = new ClaimsPrincipal(identity);
+
+        // Act
+        var result = await service.IsUserInAdminRoleAsync(user);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    /// <summary>
+    /// Verifies that admin role check falls back to email claim when preferred_username is not available.
+    /// </summary>
+    [Fact]
+    public async Task IsUserInAdminRoleAsync_FallbackToEmailClaim_ReturnsTrue()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<UserRoleService>>();
+        var testUserPrincipalName = "test@example.com";
+
+        var configurationData = new Dictionary<string, string?>
+        {
+            ["AdminUserPrincipalNames"] = testUserPrincipalName
+        };
+
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(configurationData)
+            .Build();
+
+        var service = new UserRoleService(mockLogger.Object, configuration);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Email, testUserPrincipalName)
         };
         var identity = new ClaimsIdentity(claims, "TestAuth");
         var user = new ClaimsPrincipal(identity);

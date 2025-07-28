@@ -16,8 +16,8 @@ param tags object
 @description('The Azure AD tenant ID for authentication')
 param tenantId string = tenant().tenantId
 
-@description('Comma-separated list of admin user emails')
-param adminEmails string = ''
+@description('Comma-separated list of admin User Principal Names')
+param adminUserPrincipalNames string = ''
 
 var managedIdentityName = 'id-skilling-${split(webAppName, '-')[2]}-${split(webAppName, '-')[3]}'
 var keyVaultName = 'kv-skilling-${environmentName}-${substring(uniqueString(resourceGroup().id), 0, 6)}'
@@ -177,8 +177,8 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
           value: '/signin-oidc'
         }
         {
-          name: 'AdminEmails'
-          value: adminEmails
+          name: 'AdminUserPrincipalNames'
+          value: adminUserPrincipalNames
         }
       ]
     }

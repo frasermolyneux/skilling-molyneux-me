@@ -24,7 +24,7 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
             { "AzureAd:ClientId", "test-client-id" },
             { "AzureAd:ClientSecret", "test-client-secret" },
             { "AzureAd:CallbackPath", "/signin-oidc" },
-            { "AdminEmails:0", "admin@not-this-user.com" }, // Non-admin configuration for default tests
+            { "AdminUserPrincipalNames:0", "admin@not-this-user.com" }, // Non-admin configuration for default tests
             { "KeyVaultUri", "" } // Disable Key Vault integration during testing
         }));
 

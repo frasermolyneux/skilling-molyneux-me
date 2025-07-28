@@ -13,8 +13,8 @@ param resourceToken string = uniqueString(subscription().id, location, environme
 @description('The timestamp for the deployment')
 param timestamp string = utcNow()
 
-@description('Comma-separated list of admin user emails')
-param adminEmails string = ''
+@description('Comma-separated list of admin User Principal Names')
+param adminUserPrincipalNames string = ''
 
 // Variables
 var resourceGroupName = 'rg-skilling-${environmentName}'
@@ -47,7 +47,7 @@ module mainResources 'resources.bicep' = {
     environmentName: environmentName
     appServicePlanName: appServicePlanName
     webAppName: webAppName
-    adminEmails: adminEmails
+    adminUserPrincipalNames: adminUserPrincipalNames
     tags: standardTags
   }
 }

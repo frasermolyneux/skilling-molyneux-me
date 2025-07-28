@@ -55,7 +55,7 @@ public sealed class AuthenticationIntegrationTests(TestWebApplicationFactory<Pro
                     { "AzureAd:ClientId", "test-client-id" },
                     { "AzureAd:ClientSecret", "test-client-secret" },
                     { "AzureAd:CallbackPath", "/signin-oidc" },
-                    { "AdminEmails:0", "admin@not-this-user.com" },
+                    { "AdminUserPrincipalNames:0", "admin@not-this-user.com" },
                     { "KeyVaultUri", "" } // Disable Key Vault integration during testing
                 }));
 
@@ -89,7 +89,7 @@ public sealed class AuthenticationIntegrationTests(TestWebApplicationFactory<Pro
         {
             builder.ConfigureAppConfiguration((context, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "AdminEmails:0", "admin@example.com" }
+                { "AdminUserPrincipalNames:0", "admin@example.com" }
             }));
 
             builder.ConfigureServices(services => services.AddAuthentication("AdminTest")
@@ -191,7 +191,7 @@ public class AdminTestAuthenticationHandler(
         {
             new Claim(ClaimTypes.Name, "Admin User"),
             new Claim(ClaimTypes.NameIdentifier, "admin-user-id"),
-            new Claim(ClaimTypes.Email, "admin@example.com") // This matches AdminEmails:0 configuration
+            new Claim("preferred_username", "admin@example.com") // This matches AdminUserPrincipalNames:0 configuration
         };
 
         var identity = new ClaimsIdentity(claims, "AdminTest");
