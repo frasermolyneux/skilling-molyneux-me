@@ -146,7 +146,7 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'AZURE_CLIENT_ID'
-          value: managedIdentity.properties.principalId
+          value: managedIdentity.properties.clientId
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
