@@ -17,14 +17,16 @@ public sealed class NavigationTests : PlaywrightTestBase
     public async Task Navigation_HomeToPrivacy_WorksCorrectly()
     {
         // Arrange
+        var navigation = new NavigationPage(Page!);
+        var privacyPage = new PrivacyPage(Page!);
         await NavigateToAsync();
 
         // Act - Click Privacy link in navigation
-        await Page!.ClickAsync("a[href='/Privacy']");
+        await navigation.ClickPrivacyAsync();
 
         // Assert
-        await Expect(Page).ToHaveURLAsync(new Regex(".*/Privacy"));
-        await Expect(Page.Locator("[data-automation-id='privacy-heading']")).ToContainTextAsync("Privacy Policy");
+        await Expect(Page!).ToHaveURLAsync(new Regex(".*/Privacy"));
+        await Expect(privacyPage.PageHeading).ToContainTextAsync("Privacy Policy");
     }
 
     /// <summary>
@@ -34,14 +36,16 @@ public sealed class NavigationTests : PlaywrightTestBase
     public async Task Navigation_PrivacyToHome_WorksCorrectly()
     {
         // Arrange
+        var navigation = new NavigationPage(Page!);
+        var homePage = new HomePage(Page!);
         await NavigateToAsync("/Privacy");
 
         // Act - Click Home link in navigation
-        await Page!.ClickAsync("a[href='/']");
+        await navigation.ClickHomeAsync();
 
         // Assert
-        await Expect(Page).ToHaveURLAsync(new Regex(".*/$"));
-        await Expect(Page.Locator("[data-automation-id='welcome-heading']")).ToContainTextAsync("Welcome");
+        await Expect(Page!).ToHaveURLAsync(new Regex(".*/$"));
+        await Expect(homePage.WelcomeHeading).ToContainTextAsync("Welcome");
     }
 
     /// <summary>
@@ -51,23 +55,16 @@ public sealed class NavigationTests : PlaywrightTestBase
     public async Task Navigation_BrandLink_NavigatesToHome()
     {
         // Arrange
+        var navigation = new NavigationPage(Page!);
+        var homePage = new HomePage(Page!);
         await NavigateToAsync("/Privacy");
 
         // Act - Click brand/logo link
-        var brandLink = Page!.Locator("a.navbar-brand, .navbar-brand a").First;
-        if (await brandLink.CountAsync() > 0)
-        {
-            await brandLink.ClickAsync();
+        await navigation.ClickBrandAsync();
 
-            // Assert
-            await Expect(Page).ToHaveURLAsync(new Regex(".*/$"));
-            await Expect(Page.Locator("[data-automation-id='welcome-heading']")).ToContainTextAsync("Welcome");
-        }
-        else
-        {
-            // If no brand link exists, this test is not applicable
-            await Task.CompletedTask;
-        }
+        // Assert
+        await Expect(Page!).ToHaveURLAsync(new Regex(".*/$"));
+        await Expect(homePage.WelcomeHeading).ToContainTextAsync("Welcome");
     }
 
     /// <summary>
@@ -76,13 +73,17 @@ public sealed class NavigationTests : PlaywrightTestBase
     [Fact]
     public async Task Navigation_DirectUrlAccess_WorksForAllPages()
     {
+        // Arrange
+        var homePage = new HomePage(Page!);
+        var privacyPage = new PrivacyPage(Page!);
+
         // Test direct access to home page
         await NavigateToAsync("/");
-        await Expect(Page!.Locator("[data-automation-id='welcome-heading']")).ToContainTextAsync("Welcome");
+        await Expect(homePage.WelcomeHeading).ToContainTextAsync("Welcome");
 
         // Test direct access to privacy page
         await NavigateToAsync("/Privacy");
-        await Expect(Page.Locator("[data-automation-id='privacy-heading']")).ToContainTextAsync("Privacy Policy");
+        await Expect(privacyPage.PageHeading).ToContainTextAsync("Privacy Policy");
     }
 
     /// <summary>

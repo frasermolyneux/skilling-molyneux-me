@@ -4,28 +4,30 @@
     ViewData["Title"] = "Manage Graph";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Manage Graph</h1>
-    <p>This page is only accessible to Admin users.</p>
+<div class="text-center" data-automation-id="manage-graph-main-section">
+    <h1 class="display-4" data-automation-id="manage-graph-heading">Manage Graph</h1>
+    <p data-automation-id="manage-graph-description">This page is only accessible to Admin users.</p>
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card" data-automation-id="user-info-card">
                 <div class="card-header">
-                    <h3>User Information</h3>
+                    <h3 data-automation-id="user-info-heading">User Information</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" data-automation-id="user-info-body">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <dl class="row">
+                        <dl class="row" data-automation-id="user-claims-list">
                             <dt class="col-sm-3">Display Name</dt>
-                            <dd class="col-sm-9">@User.Identity.Name</dd>
+                            <dd class="col-sm-9" data-automation-id="user-display-name">@User.Identity.Name</dd>
 
                             <dt class="col-sm-3">User Principal Name</dt>
-                            <dd class="col-sm-9">@User.FindFirst("preferred_username")?.Value</dd>
+                            <dd class="col-sm-9" data-automation-id="user-principal-name">
+                                @User.FindFirst("preferred_username")?.Value</dd>
 
                             <dt class="col-sm-3">Object ID</dt>
-                            <dd class="col-sm-9">@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value</dd>
+                            <dd class="col-sm-9" data-automation-id="user-object-id">
+                                @User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value</dd>
 
                             <dt class="col-sm-3">Tenant ID</dt>
                             <dd class="col-sm-9">@User.FindFirst("tid")?.Value</dd>

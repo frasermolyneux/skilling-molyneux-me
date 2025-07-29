@@ -18,18 +18,22 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
             aria-label="Main navigation">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">MX.Skilling.Web</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index"
+                    data-automation-id="navbar-brand-link">MX.Skilling.Web</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                    data-automation-id="navbar-toggle-button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1" role="list">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index"
+                                data-automation-id="home-nav-link">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy"
+                                data-automation-id="privacy-nav-link">Privacy</a>
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
@@ -38,7 +42,8 @@
                             if (authResult.Succeeded)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/ManageGraph">Manage Graph</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/ManageGraph"
+                                        data-automation-id="manage-graph-nav-link">Manage Graph</a>
                                 </li>
                             }
                         }
@@ -48,18 +53,21 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                    data-automation-id="user-dropdown-toggle">
                                     @User.Identity.Name
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="/Account/SignOut">Sign Out</a></li>
+                                    <li><a class="dropdown-item" href="/Account/SignOut"
+                                            data-automation-id="sign-out-link">Sign Out</a></li>
                                 </ul>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Account/SignIn">Sign In</a>
+                                <a class="nav-link text-dark" href="/Account/SignIn" data-automation-id="sign-in-link">Sign
+                                    In</a>
                             </li>
                         }
                     </ul>
@@ -75,7 +83,8 @@
 
     <footer class="border-top footer text-muted" role="contentinfo">
         <div class="container">
-            &copy; 2025 - MX.Skilling.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2025 - MX.Skilling.Web - <a asp-area="" asp-page="/Privacy"
+                data-automation-id="footer-privacy-link">Privacy</a>
         </div>
     </footer>
 
@@ -87,5 +96,3 @@
 </body>
 
 </html>
-
-               

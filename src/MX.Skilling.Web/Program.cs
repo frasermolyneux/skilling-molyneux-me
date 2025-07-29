@@ -3,6 +3,12 @@ using MX.Skilling.Web.Extensions;
 // Application entry point and configuration
 var builder = WebApplication.CreateBuilder(args);
 
+// Enable static web assets for non-Development environments (needed for UITest)
+if (!builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseStaticWebAssets();
+}
+
 // Add Key Vault configuration
 builder.AddKeyVaultConfiguration();
 

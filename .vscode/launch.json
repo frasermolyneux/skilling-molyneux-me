@@ -134,7 +134,24 @@
       "console": "internalConsole",
       "stopAtEntry": false,
       "env": {
-        "PLAYWRIGHT_DEBUG": "1"
+        "KEY_VAULT_URI": "https://kv-skilling-dev-e3r7w4.vault.azure.net/"
+      }
+    },
+    {
+      "name": "Debug UI Tests (Playwright Debug Mode)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/MX.Skilling.Web.UITests/MX.Skilling.Web.UITests.csproj"
+      ],
+      "cwd": "${workspaceFolder}/src",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "PLAYWRIGHT_DEBUG": "1",
+        "KEY_VAULT_URI": "https://kv-skilling-dev-e3r7w4.vault.azure.net/"
       }
     },
     {
@@ -163,19 +180,33 @@
         "action": "openExternally",
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
-    }
-  ],
-  "compounds": [
+    },
     {
-      "name": "Launch Web App for UI Testing",
-      "configurations": [
-        "Launch MX.Skilling.Web (Watch Mode)"
+      "name": "Launch MX.Skilling.Web (UITest Mode)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "watch",
+        "--project",
+        "${workspaceFolder}/src/MX.Skilling.Web",
+        "run",
+        "--launch-profile",
+        "UITest"
       ],
-      "stopAll": true,
-      "presentation": {
-        "hidden": false,
-        "group": "Web App + Testing",
-        "order": 1
+      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "UITest",
+        "KEY_VAULT_URI": "https://kv-skilling-dev-e3r7w4.vault.azure.net/"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     }
   ]
