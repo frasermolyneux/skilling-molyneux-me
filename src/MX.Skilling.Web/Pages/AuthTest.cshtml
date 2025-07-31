@@ -1,0 +1,58 @@
+@page
+@model MX.Skilling.Web.Pages.AuthTestModel
+@{
+    ViewData["Title"] = "Authentication Test";
+}
+
+<h1>Authentication Test</h1>
+
+<h2>User.Identity Information</h2>
+<p><strong>IsAuthenticated:</strong> @(User.Identity?.IsAuthenticated)</p>
+<p><strong>Name:</strong> @(User.Identity?.Name ?? "null")</p>
+<p><strong>AuthenticationType:</strong> @(User.Identity?.AuthenticationType ?? "null")</p>
+
+<h2>All Identities</h2>
+@if (User.Identities.Any())
+{
+    <ul>
+        @foreach (var identity in User.Identities)
+        {
+            <li>
+                <strong>Type:</strong> @identity.AuthenticationType,
+                <strong>IsAuthenticated:</strong> @identity.IsAuthenticated,
+                <strong>Name:</strong> @(identity.Name ?? "null")
+                @if (identity.Claims.Any())
+                {
+                    <ul>
+                        @foreach (var claim in identity.Claims.Take(5))
+                        {
+                            <li>@claim.Type: @claim.Value</li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No identities found.</p>
+}
+
+<h2>Authentication Check Result</h2>
+@{
+    var isAuthenticated = User.Identities.Any(i => i.IsAuthenticated);
+    var userName = User.Identities.FirstOrDefault(i => i.IsAuthenticated)?.Name ?? "User";
+}
+<p><strong>Any Identity Authenticated:</strong> @isAuthenticated</p>
+<p><strong>First Authenticated Name:</strong> @userName</p>
+
+<h2>Layout Logic Test</h2>
+@if (isAuthenticated)
+{
+    <div class="alert alert-success">✅ User should see authenticated UI (dropdown, admin links)</div>
+}
+else
+{
+    <div class="alert alert-warning">❌ User should see sign-in link</div>
+}

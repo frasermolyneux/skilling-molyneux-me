@@ -180,34 +180,6 @@
         "action": "openExternally",
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
-    },
-    {
-      "name": "Launch MX.Skilling.Web (UITest Mode)",
-      "type": "coreclr",
-      "request": "launch",
-      "program": "dotnet",
-      "args": [
-        "watch",
-        "--project",
-        "${workspaceFolder}/src/MX.Skilling.Web",
-        "run",
-        "--launch-profile",
-        "UITest"
-      ],
-      "cwd": "${workspaceFolder}/src/MX.Skilling.Web",
-      "console": "internalConsole",
-      "stopAtEntry": false,
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "UITest",
-        "KEY_VAULT_URI": "https://kv-skilling-dev-e3r7w4.vault.azure.net/"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/src/MX.Skilling.Web/Views"
-      },
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      }
     }
   ]
 }

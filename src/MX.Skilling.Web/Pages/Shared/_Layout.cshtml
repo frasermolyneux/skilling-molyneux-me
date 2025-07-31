@@ -35,7 +35,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy"
                                 data-automation-id="privacy-nav-link">Privacy</a>
                         </li>
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @{
+                            // Check if user is authenticated via any supported scheme
+                            // The primary identity might be Cookies (default scheme) but we need to check all identities
+                            var isAuthenticated = User.Identities.Any(i => i.IsAuthenticated);
+                            var userName = User.Identities.FirstOrDefault(i => i.IsAuthenticated)?.Name ?? "User";
+                        }
+                        @if (isAuthenticated)
                         {
                             var authResult = await AuthorizationService.AuthorizeAsync(User,
                             MX.Skilling.Web.Authorization.AuthorizationConstants.AdminPolicy);
@@ -49,13 +55,13 @@
                         }
                     </ul>
                     <ul class="navbar-nav">
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @if (isAuthenticated)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false"
                                     data-automation-id="user-dropdown-toggle">
-                                    @User.Identity.Name
+                                    @userName
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="/Account/SignOut"

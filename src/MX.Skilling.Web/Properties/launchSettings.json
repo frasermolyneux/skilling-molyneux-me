@@ -18,15 +18,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },
-    "UITest": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7053;http://localhost:5088",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "UITest"
-      }
     }
   }
 }

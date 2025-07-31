@@ -31,7 +31,7 @@ public sealed class AuthenticationTests : PlaywrightTestBase
 
     /// <summary>
     /// Verifies that the ManageGraph page handles unauthenticated access appropriately.
-    /// In UITest mode (JWT Bearer), returns 401. In production (Cookie), redirects to sign-in.
+    /// Should redirect to sign-in or return appropriate error.
     /// </summary>
     [Fact]
     public async Task ManageGraphPage_RedirectsToSignIn_WhenNotAuthenticated()
@@ -42,11 +42,11 @@ public sealed class AuthenticationTests : PlaywrightTestBase
         // Assert
         if (response != null && response.Status == 401)
         {
-            // JWT Bearer mode - returns 401 Unauthorized
+            // Returns 401 Unauthorized (expected for unauthenticated access)
             return;
         }
 
-        // Cookie authentication mode - should redirect to Microsoft login
+        // Should redirect to Microsoft login
         try
         {
             await Page.WaitForURLAsync("**/oauth2/v2.0/authorize**", new() { Timeout = 5000 });
@@ -63,8 +63,7 @@ public sealed class AuthenticationTests : PlaywrightTestBase
 
     /// <summary>
     /// Verifies that the Sign In link navigates to the sign-in page.
-    /// In UITest mode (JWT Bearer), sign-in link may not initiate OIDC redirect.
-    /// In production (Cookie), should redirect to Microsoft login.
+    /// Should redirect to Microsoft login for authentication.
     /// </summary>
     [Fact]
     public async Task SignInLink_NavigatesToSignInPage()
@@ -81,19 +80,18 @@ public sealed class AuthenticationTests : PlaywrightTestBase
         }
         catch (TimeoutException)
         {
-            // Timeout is acceptable in UITest mode
+            // Timeout is acceptable during testing
         }
 
         // Assert
         try
         {
-            // Cookie authentication mode - should redirect to Microsoft login
+            // Should redirect to Microsoft login
             await Page!.WaitForURLAsync("**/oauth2/v2.0/authorize**", new() { Timeout = 2000 });
         }
         catch (TimeoutException)
         {
-            // In UITest mode, the sign-in link might lead to a different page or error
-            // Check if we're still on a valid page or got an appropriate response
+            // Check if we're on a sign-in related page or got an appropriate response
             var currentUrl = Page!.Url;
             var hasSignInRelatedContent = currentUrl.Contains("signin") ||
                                         currentUrl.Contains("Account") ||

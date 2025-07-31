@@ -1,7 +1,12 @@
+using System.Security.Claims;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace MX.Skilling.Web.Tests.Integration;
 
@@ -29,9 +34,39 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
         }));
 
         builder.ConfigureServices(services => services.AddAuthentication("Test")
-            .AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, TestAuthenticationSchemeHandler>(
+            .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(
                 "Test", _ => { }));
 
         builder.UseEnvironment("Testing");
+    }
+}
+
+/// <summary>
+/// Simple test authentication handler for integration tests.
+/// </summary>
+/// <param name="options">The authentication options.</param>
+/// <param name="logger">The logger factory.</param>
+/// <param name="encoder">The URL encoder.</param>
+public class TestAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
+    ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
+{
+    /// <summary>
+    /// Handles the authentication request by returning a successful result with test claims.
+    /// </summary>
+    /// <returns>The authentication result.</returns>
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, "Test User"),
+            new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
+            new Claim(ClaimTypes.Email, "test@example.com")
+        };
+
+        var identity = new ClaimsIdentity(claims, "Test");
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, "Test");
+
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 }

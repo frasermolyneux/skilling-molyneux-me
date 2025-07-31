@@ -32,13 +32,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", testUserPrincipalName)
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -69,13 +69,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", testUserPrincipalName)
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -103,13 +103,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", "different@example.com")
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -129,7 +129,7 @@ public class UserRoleServiceTests
         var mockLogger = new Mock<ILogger<UserRoleService>>();
         var configuration = new ConfigurationBuilder().Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
         var user = new ClaimsPrincipal(); // No authenticated identity
 
         // Act
@@ -149,13 +149,13 @@ public class UserRoleServiceTests
         var mockLogger = new Mock<ILogger<UserRoleService>>();
         var configuration = new ConfigurationBuilder().Build(); // Empty configuration
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", "test@example.com")
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -183,13 +183,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", "admin@example.com")
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -218,13 +218,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new("preferred_username", testUserPrincipalName)
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
@@ -253,13 +253,13 @@ public class UserRoleServiceTests
             .AddInMemoryCollection(configurationData)
             .Build();
 
-        var service = new UserRoleService(mockLogger.Object, configuration);
+        var service = new UserRoleService(configuration, mockLogger.Object);
 
         var claims = new List<Claim>
         {
             new(ClaimTypes.Email, testUserPrincipalName)
         };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var identity = new ClaimsIdentity(claims, "Cookies");
         var user = new ClaimsPrincipal(identity);
 
         // Act
